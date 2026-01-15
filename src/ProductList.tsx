@@ -1,42 +1,56 @@
 import {useEffect, useState} from "react";
 import type {Product} from "./Product.ts";
-import Cart from "./Cart.ts";
+
+type CartItem = {
+  product: Product
+  quantity: number
+}
 
 export function ProductList() {
-  const [products, setProducts] = useState([] as Product[])
+  const [products, setProducts] = useState<Product[]>([])
+  const [cart, setCart] = useState<CartItem[]>([])
   const [loading, setLoading] = useState(true)
-  const [cart] = useState<Cart>(new Cart())
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-	  // Simuliere API-Aufruf mit Beispieldaten
-	  const fetchProducts = async () => {
-	    // Beispiel-JSON-Daten
-	    const sampleData = [
-	      {id: 1, name: 'Laptop', price: 899.99},
-	      {id:   2, name: "Maus", price: 24.99},
-	      {id: 3, name: "Tastatur",
-	        price: 79.99 },
-	      { id: 4, name: "Monitor", price: 299.99},
-	      {id: 5, name: 'Headset', price: 59.99}     ,
-	      {id: 5, name: 'USB Stick', price: 4.99}
-	    ]
-
-	    // Simuliere Netzwerk-Verzögerung
-	    await new Promise(resolve => setTimeout(resolve, 500))
-
-	    setProducts(sampleData)
-	    setLoading(false)
-		}
+    const fetchProducts = async () => {
+      try {
+        const baseUrl = import.meta.env.VITE_API_BASE_URL
+        const res = await fetch(`${baseUrl}/products`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const data: Product[] = await res.json()
+        setProducts(data)
+      } catch (e) {
+        setError("Could not load products. Please try again.")
+        console.error(e)
+      } finally {
+        setLoading(false)
+      }
+    }
 
     fetchProducts()
   }, [])
 
   const addToCart = (product: Product) => () => {
-    cart.addItem(product)
+    setCart( prev => {
+      const existing = prev.find( item => item.product.id === product.id);
+      if (existing) {
+        return prev.map(item => item.product.id === product.id ? {...item, quantity: item.quantity + 1} : item)
+      } else {
+        return [...prev, {product, quantity: 1}]
+      }
+    })
   }
+  const total = cart.reduce((sum, i) => sum + i.product.price * i.quantity, 0)
+  const count = cart.reduce((sum, i) => sum + i.quantity, 0)
 
-  if (loading) {
-    return (
+  {error && (
+    <div className="mb-4 rounded bg-red-100 p-3 text-red-700">
+      {error}
+    </div>
+  )}
+
+  {loading && (
       <div className="flex items-center justify-center min-h-screen bg-gray-100">
         <div className="text-xl text-gray-600">Lädt...</div>
       </div>
@@ -48,8 +62,11 @@ export function ProductList() {
 
     <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <ul className="divide-y divide-gray-200">
-        {products.map((product, i) => {
-          if ((i % 2) === 0) return (<li key={product.id} className="p-4 hover:bg-gray-50 transition-colors">
+        {products.map((product, i) => (
+          <li 
+            key={product.id} 
+            className={"p-4 hover:bg-gray-50 transition-colors " + (i % 2 ? "bg-gray-50" : "")}
+          >
             <div className="flex justify-between items-center pl-6">
               <span className="text-lg font-medium text-gray-800">
                 {product.name}
@@ -57,26 +74,14 @@ export function ProductList() {
               <span className="text-lg font-semibold text-blue-600">
                 €{product.price.toFixed(2)}
               </span>
-              <button onClick={addToCart(product)}>+</button>
+              <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded cursor-pointer" onClick={addToCart(product)}>+</button>
             </div>
-          </li>)
-          else return (<li key={product.id} className="p-4 bg-gray-50 hover:bg-gray-100 transition-colors">
-            <div className="flex justify-between items-center pl-3">
-              <span className="text-lg font-medium text-gray-800">
-                {product.name}
-              </span>
-              <span className="text-lg font-semibold text-blue-600">
-                €{product.price.toFixed(2)}
-              </span>
-              <button className="mr-1" onClick={addToCart(product)}>+</button>
-            </div>
-          </li>)
-        }
-        )}
+          </li>
+          ))}
       </ul>
     </div>
     <div className="mt-4 text-center text-gray-600">
-      {cart.getCount()} Produkte im Warenkorb (€{cart.getTotalPrice().toFixed(2)})
+      {count} Produkte im Warenkorb (€{total.toFixed(2)})
     </div>
   </>)
 }
