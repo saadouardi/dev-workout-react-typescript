@@ -48,8 +48,26 @@ Schau dir das Projekt an und beantworte diese Fragen:
 . aber kein React-State Update gemacht → kein Re-Render
 
 6- Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden.
+
+- Ja. Ich habe die Produktliste aus dem Backend geladen:
+
+. Frontend nutzt fetch(${VITE_API_BASE_URL}/products)
+. API Base URL kommt aus .env / .env.example
+. Backend läuft lokal z. B. auf [http://localhost:8080]
+. Wegen CORS habe ich im Backend eine kleine CORS-Konfiguration ergänzt (damit Requests von localhost:5173 erlaubt sind)
+
 7- Erstelle eine verbesserte Version des Projekts mit den von dir vorgeschlagenen Änderungen. Ähnliche Probleme /
    Fehler brauchst du nur einmal zu beheben
+
+- Ich habe eine verbesserte Version umgesetzt, mit diesen Änderungen:
+
+. Warenkorb aktualisiert sich korrekt (React State + immutable updates)
+. Warenkorb fasst gleiche Produkte zusammen (quantity)
+. Produktdaten werden aus dem Backend geladen
+. .env.example hinzugefügt für einfaches Setup
+. .gitignore angepasst, damit .env nicht committed wird
+. kleine Fehlerbehandlung beim Laden der Produkte
+
 8- Optionale Zusatzaufgabe: Füge eine einfache Produktdetailseite hinzu, die angezeigt wird, wenn auf ein Produkt in der
    Produktliste geklickt wird. Nimm dazu ein zusätzliches Feld "description" in den Produktdaten auf und zeige diese
    Beschreibung auf der Detailseite an.
