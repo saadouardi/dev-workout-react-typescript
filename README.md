@@ -3,7 +3,8 @@
 Schau dir das Projekt an und beantworte diese Fragen:
 
 1- Wie startet man das Projekt lokal?
-. Repository klonen
+
+- nach dem Klonen des Repos von GitHub und dem Wechsel in das Hauptverzeichnis des Frontends "dev-workout-react-typescript"
 . Abhängigkeiten installieren: npm install
 . Dev-Server starten: npm run dev
 . Im Browser öffnen: [http://localhost:5173]
@@ -11,7 +12,6 @@ Schau dir das Projekt an und beantworte diese Fragen:
 2- Was fehlt dem Projekt, damit es in einer Produktionsumgebung eingesetzt werden kann?
 
 - Für Produktion würde ich ergänzen:
-
 . Build/Deploy Ablauf (z. B. npm run build + Hosting)
 . Konfiguration über Umgebungsvariablen (API-URL nicht hardcoded, z. B. .env)
 . Fehlerbehandlung im UI (wenn API nicht erreichbar ist)
@@ -22,7 +22,6 @@ Schau dir das Projekt an und beantworte diese Fragen:
 3- Was sollte man ergänzen, wenn man mit mehreren Entwicklern daran arbeiten möchte?
 
 - Ich würde hinzufügen:
-
 . .env.example, damit jeder schnell starten kann
 . .gitignore für .env, damit keine lokalen Werte ins Repo kommen
 . Linting/Formatting (ESLint/Prettier) für einheitlichen Code
@@ -32,9 +31,8 @@ Schau dir das Projekt an und beantworte diese Fragen:
 4- Welche Verbesserungen würdest du am Code vornehmen?
 
 - Meine Verbesserungen / Vorschläge:
-
 . Warenkorb-Logik in React-State (kein mutables Objekt ohne Re-Render)
-. gleiche Produkte im Warenkorb zusammenfassen mit quantity
+. gleiche Produkte im Warenkorb mit einer quantity zusammenfassen
 . Produkte nicht als Fake-Daten, sondern aus Backend laden
 . Fehler anzeigen, wenn API nicht funktioniert (nicht nur console)
 . Code etwas vereinfachen (weniger doppeltes JSX / bessere Typen)
@@ -42,7 +40,6 @@ Schau dir das Projekt an und beantworte diese Fragen:
 5- Warum wird der Warenkorb beim Hinzufügen von Produkten nicht aktualisiert? Wie würdest du das Problem beheben?
 
 - Der Warenkorb wurde früher nicht aktualisiert, weil:
-
 . es eine mutable Struktur (z. B. Class/Set) war
 . beim Hinzufügen wurde nur intern geändert (addItem)
 . aber kein React-State Update gemacht → kein Re-Render
@@ -50,7 +47,6 @@ Schau dir das Projekt an und beantworte diese Fragen:
 6- Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden.
 
 - Ja. Ich habe die Produktliste aus dem Backend geladen:
-
 . Frontend nutzt fetch(${VITE_API_BASE_URL}/products)
 . API Base URL kommt aus .env / .env.example
 . Backend läuft lokal z. B. auf [http://localhost:8080]
@@ -60,13 +56,12 @@ Schau dir das Projekt an und beantworte diese Fragen:
    Fehler brauchst du nur einmal zu beheben
 
 - Ich habe eine verbesserte Version umgesetzt, mit diesen Änderungen:
-
 . Warenkorb aktualisiert sich korrekt (React State + immutable updates)
 . Warenkorb fasst gleiche Produkte zusammen (quantity)
 . Produktdaten werden aus dem Backend geladen
 . .env.example hinzugefügt für einfaches Setup
 . .gitignore angepasst, damit .env nicht committed wird
-. kleine Fehlerbehandlung beim Laden der Produkte
+. einfache Fehlerbehandlung beim Laden der Produkte
 
 8- Optionale Zusatzaufgabe: Füge eine einfache Produktdetailseite hinzu, die angezeigt wird, wenn auf ein Produkt in der
    Produktliste geklickt wird. Nimm dazu ein zusätzliches Feld "description" in den Produktdaten auf und zeige diese
