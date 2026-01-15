@@ -20,8 +20,33 @@ Schau dir das Projekt an und beantworte diese Fragen:
 . Security/Updates (Dependencies aktuell halten)
 
 3- Was sollte man ergänzen, wenn man mit mehreren Entwicklern daran arbeiten möchte?
+
+- Ich würde hinzufügen:
+
+. .env.example, damit jeder schnell starten kann
+. .gitignore für .env, damit keine lokalen Werte ins Repo kommen
+. Linting/Formatting (ESLint/Prettier) für einheitlichen Code
+. kurze README Regeln (wie starten, wie committen)
+. GitHub Actions (lint + build)
+
 4- Welche Verbesserungen würdest du am Code vornehmen?
+
+- Meine Verbesserungen / Vorschläge:
+
+. Warenkorb-Logik in React-State (kein mutables Objekt ohne Re-Render)
+. gleiche Produkte im Warenkorb zusammenfassen mit quantity
+. Produkte nicht als Fake-Daten, sondern aus Backend laden
+. Fehler anzeigen, wenn API nicht funktioniert (nicht nur console)
+. Code etwas vereinfachen (weniger doppeltes JSX / bessere Typen)
+
 5- Warum wird der Warenkorb beim Hinzufügen von Produkten nicht aktualisiert? Wie würdest du das Problem beheben?
+
+- Der Warenkorb wurde früher nicht aktualisiert, weil:
+
+. es eine mutable Struktur (z. B. Class/Set) war
+. beim Hinzufügen wurde nur intern geändert (addItem)
+. aber kein React-State Update gemacht → kein Re-Render
+
 6- Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden.
 7- Erstelle eine verbesserte Version des Projekts mit den von dir vorgeschlagenen Änderungen. Ähnliche Probleme /
    Fehler brauchst du nur einmal zu beheben
