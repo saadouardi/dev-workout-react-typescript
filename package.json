@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "preinstall": "npm config set legacy-peer-deps true",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
