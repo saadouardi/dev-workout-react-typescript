@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react"
 import { ShoppingCart } from "lucide-react"
-import { useCart } from "../context/CartContext"
+import { useCart } from "@/context/CartContext"
 
 export const Header: React.FC = () => {
     const { items, count, total, add, removeOne, clear } = useCart()

@@ -1,68 +1,114 @@
 # Developer Workout React & TypeScript
 
-Schau dir das Projekt an und beantworte diese Fragen:
+## 1) Wie startet man das Projekt lokal?
 
-1- Wie startet man das Projekt lokal?
+- Repo klonen und ins Projektverzeichnis gehen:
+  - `cd dev-workout-react-typescript`
 
-- nach dem Klonen des Repos von GitHub und dem Wechsel in das Hauptverzeichnis des Frontends "dev-workout-react-typescript"
-. Abhängigkeiten installieren: npm install
-. Dev-Server starten: npm run dev
-. Im Browser öffnen: [http://localhost:5173]
+- Abhängigkeiten installieren:
+  - `npm install`
 
-2- Was fehlt dem Projekt, damit es in einer Produktionsumgebung eingesetzt werden kann?
+- `.env` Datei anlegen (oder `.env.example` kopieren):
+  - `VITE_API_BASE_URL=http://localhost:8080`
 
-- Für Produktion würde ich ergänzen:
-. Build/Deploy Ablauf (z. B. npm run build + Hosting)
-. Konfiguration über Umgebungsvariablen (API-URL nicht hardcoded, z. B. .env)
-. Fehlerbehandlung im UI (wenn API nicht erreichbar ist)
-. Tests (mindestens einfache Smoke-/Component-Tests)
-. CI Pipeline (automatisch build + lint + tests)
-. Security/Updates (Dependencies aktuell halten)
+- Dev-Server starten:
+  - `npm run dev`
 
-3- Was sollte man ergänzen, wenn man mit mehreren Entwicklern daran arbeiten möchte?
+- Im Browser öffnen:
+  - [http://localhost:5173]
 
-- Ich würde hinzufügen:
-. .env.example, damit jeder schnell starten kann
-. .gitignore für .env, damit keine lokalen Werte ins Repo kommen
-. Linting/Formatting (ESLint/Prettier) für einheitlichen Code
-. kurze README Regeln (wie starten, wie committen)
-. GitHub Actions (lint + build)
+## 2) Was fehlt dem Projekt, damit es in einer Produktionsumgebung eingesetzt werden kann?
 
-4- Welche Verbesserungen würdest du am Code vornehmen?
+Für Produktion würde ich ergänzen / beachten:
 
-- Meine Verbesserungen / Vorschläge:
-. Warenkorb-Logik in React-State (kein mutables Objekt ohne Re-Render)
-. gleiche Produkte im Warenkorb mit einer quantity zusammenfassen
-. Produkte nicht als Fake-Daten, sondern aus Backend laden
-. Fehler anzeigen, wenn API nicht funktioniert (nicht nur console)
-. Code etwas vereinfachen (weniger doppeltes JSX / bessere Typen)
+- Build + Hosting Prozess (z. B. `npm run build` + Hosting wie Vercel)
+- Umgebungsvariablen für API-URL (z. B. `.env` pro Umgebung)
+- Monitoring / Error Tracking (z. B. Sentry) und sinnvolle Logs
+- Tests (Unit-/Component-Tests)
+- CI Pipeline (lint + build + tests)
+- Security: Dependency Updates, ggf. Security Headers
+- CORS sauber auf Prod-Domain begrenzen (Backend)
 
-5- Warum wird der Warenkorb beim Hinzufügen von Produkten nicht aktualisiert? Wie würdest du das Problem beheben?
+## 3) Was sollte man ergänzen, wenn man mit mehreren Entwicklern daran arbeiten möchte?
 
-- Der Warenkorb wurde früher nicht aktualisiert, weil:
-. es eine mutable Struktur (z. B. Class/Set) war
-. beim Hinzufügen wurde nur intern geändert (addItem)
-. aber kein React-State Update gemacht → kein Re-Render
+- `.env.example`, damit jeder schnell starten kann
+- `.gitignore` für `.env`, damit keine lokalen Werte committed werden
+- Linting/Formatting (ESLint + Prettier) für einheitlichen Code
+- kurze Contributing-Regeln (z. B. Branch-Namen, Commits)
+- GitHub Actions (lint + build)
 
-6- Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden.
+## 4) Welche Verbesserungen würdest du am Code vornehmen?
 
-- Ja. Ich habe die Produktliste aus dem Backend geladen:
-. Frontend nutzt fetch(${VITE_API_BASE_URL}/products)
-. API Base URL kommt aus .env / .env.example
-. Backend läuft lokal z. B. auf [http://localhost:8080]
-. Wegen CORS habe ich im Backend eine kleine CORS-Konfiguration ergänzt (damit Requests von localhost:5173 erlaubt sind)
+Ich habe folgende Verbesserungen umgesetzt:
 
-7- Erstelle eine verbesserte Version des Projekts mit den von dir vorgeschlagenen Änderungen. Ähnliche Probleme /
-   Fehler brauchst du nur einmal zu beheben
+- Projektstruktur verbessert (`src/pages`, `src/components`, `src/context`, `src/types`)
+- Routing mit `react-router-dom`:
+  - `/` Produktliste
+  - `/products/:id` Produktdetail
+- Warenkorb in einen globalen React Context ausgelagert (sauberer State + Wiederverwendung)
+- Warenkorb UX verbessert:
+  - Cart Icon im Header
+  - Dropdown mit Items, Menge +/-, Clear, Total
+- Produktdaten kommen aus dem Backend (kein Fake-Sample im Frontend)
+- Fehlerbehandlung + Loading-Komponente
+- Path Alias `@/` für clean imports
+- SEO/Meta:
+  - meta tags in `index.html`
+  - dynamische Titles/Descriptions pro Seite (Helmet)
+- Favicon angepasst
 
-- Ich habe eine verbesserte Version umgesetzt, mit diesen Änderungen:
-. Warenkorb aktualisiert sich korrekt (React State + immutable updates)
-. Warenkorb fasst gleiche Produkte zusammen (quantity)
-. Produktdaten werden aus dem Backend geladen
-. .env.example hinzugefügt für einfaches Setup
-. .gitignore angepasst, damit .env nicht committed wird
-. einfache Fehlerbehandlung beim Laden der Produkte
+## 5) Warum wird der Warenkorb beim Hinzufügen von Produkten nicht aktualisiert? Wie würdest du das Problem beheben?
 
-8- Optionale Zusatzaufgabe: Füge eine einfache Produktdetailseite hinzu, die angezeigt wird, wenn auf ein Produkt in der
-   Produktliste geklickt wird. Nimm dazu ein zusätzliches Feld "description" in den Produktdaten auf und zeige diese
-   Beschreibung auf der Detailseite an.
+Ursache im ursprünglichen Projekt:
+
+- Der Warenkorb war ein mutables Objekt (Class/Set)
+- Beim Hinzufügen wurde nur intern mutiert, aber React-State wurde nicht geändert
+- Ergebnis: kein Re-Render → UI bleibt gleich
+
+Fix:
+
+- Warenkorb über React-State / Context verwalten (immutable updates)
+- gleiche Produkte zusammenfassen mit `quantity`
+
+## 6) Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden
+
+Ja.
+
+- Frontend lädt Daten mit:
+  - `fetch(${VITE_API_BASE_URL}/products)`
+- API Base URL kommt aus `.env`
+- Backend läuft lokal z. B. auf:
+  - [http://localhost:8080]
+
+Wichtig:
+
+- Für lokale Entwicklung brauchte es CORS. Dafür habe ich im Backend eine CORS-Konfiguration ergänzt, damit Requests von `http://localhost:5173` erlaubt sind.
+
+## 7) Erstelle eine verbesserte Version des Projekts mit den von dir vorgeschlagenen Änderungen
+
+Umgesetzt:
+
+- Cart funktioniert zuverlässig (Context + immutable updates)
+- Cart Dropdown im Header (bessere UX)
+- Produktliste aus Backend
+- Produktdetailseite (Bonus)
+- `.env.example` + `.gitignore` angepasst
+- Fehlerhandling + Loading UI
+- Aliasing `@/` für Imports
+- Meta Tags / SEO
+
+## 8) Optionale Zusatzaufgabe: Produktdetailseite
+
+Umgesetzt:
+
+- Klick auf ein Produkt führt zu `/products/:id`
+- Detailseite zeigt:
+  - Name, Preis, Beschreibung
+- Beschreibung kommt aus dem Backend-Feld `description`
+- Zusätzlich: eigener Page Title und Meta Description
+
+## Live Demo
+
+Frontend (Vercel): [https://micromerce.vercel.app/]
+
+Backend (Render): [https://dev-workout-backend-kotlin.onrender.com/products]

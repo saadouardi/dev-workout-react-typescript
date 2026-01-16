@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
 import { Helmet } from "react-helmet-async";
-import type { Product } from "../types/Product.ts"
-import Loading from "../components/Loading.tsx"
+import type { Product } from "@/types/Product.ts"
+import Loading from "@/components/Loading.tsx"
 
 export function ProductDetail() {
     const { id } = useParams()

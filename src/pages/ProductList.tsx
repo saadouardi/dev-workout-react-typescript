@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react"
 import { Helmet } from "react-helmet-async"
 import { useNavigate  } from "react-router-dom"
-import { useCart } from "../context/CartContext"
-import type { Product } from "../types/Product.ts"
-import Loading from "../components/Loading.tsx"
+import { useCart } from "@/context/CartContext"
+import type { Product } from "@/types/Product.ts"
+import Loading from "@/components/Loading.tsx"
 
 export function ProductList() {
   let navigate = useNavigate();
