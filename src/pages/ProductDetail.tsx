@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react"
 import { Link, useParams } from "react-router-dom"
-import type { Product } from "../types/Product.ts";
-import Loading from "../components/Loading.tsx";
+import { Helmet } from "react-helmet-async";
+import type { Product } from "../types/Product.ts"
+import Loading from "../components/Loading.tsx"
 
 export function ProductDetail() {
     const { id } = useParams()
@@ -53,22 +54,31 @@ export function ProductDetail() {
     if (!product) return null
 
     return (
-        <div className="space-y-4">
-            <Link to="/" className="text-blue-600 hover:underline">
-                ← Back to list
-            </Link>
+        <>
+            <Helmet>
+                <title>{product.name} | Micromerce Workout</title>
+                <meta name="description" content={product.description ?? "Product details"} />
+                <meta property="og:title" content={`${product.name} – Micromerce Workout`} />
+                <meta property="og:description" content={product.description ?? "Product details"} />
+            </Helmet>
+            
+            <div className="space-y-4">
+                <Link to="/" className="text-blue-600 hover:underline">
+                    ← Back to list
+                </Link>
 
-            <div className="bg-white rounded-lg shadow-md p-6">
-                <div className="flex items-start justify-between gap-4">
-                    <div>
-                        <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
-                        <p className="mt-2 text-gray-600">{product.description ?? "No description."}</p>
-                    </div>
-                    <div className="text-lg font-semibold text-blue-600">
-                        €{product.price.toFixed(2)}
+                <div className="bg-white rounded-lg shadow-md p-6">
+                    <div className="flex items-start justify-between gap-4">
+                        <div>
+                            <h2 className="text-2xl font-bold text-gray-800">{product.name}</h2>
+                            <p className="mt-2 text-gray-600">{product.description ?? "No description."}</p>
+                        </div>
+                        <div className="text-lg font-semibold text-blue-600">
+                            €{product.price.toFixed(2)}
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </>
     )
 }

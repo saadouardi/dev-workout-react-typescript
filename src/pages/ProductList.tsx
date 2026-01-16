@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState } from "react"
+import { Helmet } from "react-helmet-async"
 import { useNavigate  } from "react-router-dom"
 import { useCart } from "../context/CartContext"
-import type { Product } from "../types/Product.ts";
-import Loading from "../components/Loading.tsx";
+import type { Product } from "../types/Product.ts"
+import Loading from "../components/Loading.tsx"
 
 export function ProductList() {
   let navigate = useNavigate();
@@ -47,6 +48,13 @@ export function ProductList() {
 
   return (
     <>
+      <Helmet>
+        <title>Products | Micromerce Workout</title>
+        <meta name="description" content="Browse all available products and add them to your cart." />
+        <meta property="og:title" content="Product List – Micromerce Workout" />
+        <meta property="og:description" content="Browse products and manage your shopping cart." />
+      </Helmet>
+
       <h1 className="text-3xl font-bold text-gray-800 mb-6">Produktliste</h1>
 
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
