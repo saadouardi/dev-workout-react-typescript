@@ -24,7 +24,7 @@ export const Header: React.FC = () => {
                 <div className="relative" ref={boxRef}>
                     <button
                         type="button"
-                        className="flex items-center gap-2 rounded px-2 py-1 hover:bg-gray-100"
+                        className="flex items-center gap-2 rounded px-2 py-1 hover:bg-gray-100 cursor-pointer"
                         onClick={() => setOpen(o => !o)}
                         aria-label="Open cart"
                     >
@@ -38,7 +38,7 @@ export const Header: React.FC = () => {
                                 <span className="font-semibold text-gray-800">Cart</span>
                                 {items.length > 0 && (
                                 <button
-                                    className="text-sm text-gray-500 hover:text-gray-700"
+                                    className="text-sm text-gray-500 hover:text-gray-700 cursor-pointer"
                                     onClick={clear}
                                 >
                                     Clear
@@ -66,7 +66,7 @@ export const Header: React.FC = () => {
 
                                             <div className="flex items-center gap-2">
                                                 <button
-                                                    className="h-8 w-8 rounded bg-gray-100 hover:bg-gray-200 font-bold"
+                                                    className="h-8 w-8 rounded bg-gray-100 hover:bg-gray-200 font-bold cursor-pointer"
                                                     onClick={() => removeOne(i.product.id)}
                                                     aria-label="Remove one"
                                                 >
@@ -76,7 +76,7 @@ export const Header: React.FC = () => {
                                                     {i.quantity}
                                                 </span>
                                                 <button
-                                                    className="h-8 w-8 rounded bg-gray-100 hover:bg-gray-200 font-bold"
+                                                    className="h-8 w-8 rounded bg-gray-100 hover:bg-gray-200 font-bold cursor-pointer"
                                                     onClick={() => add(i.product)}
                                                     aria-label="Add one"
                                                 >
