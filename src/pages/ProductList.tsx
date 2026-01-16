@@ -1,18 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate  } from "react-router-dom"
-import { ShoppingCart } from 'lucide-react';
+import { useCart } from "../context/CartContext"
 import type { Product } from "../types/Product.ts";
 import Loading from "../components/Loading.tsx";
-
-type CartItem = {
-  product: Product;
-  quantity: number;
-};
 
 export function ProductList() {
   let navigate = useNavigate();
   const [products, setProducts] = useState<Product[]>([]);
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const { add } = useCart()
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -37,24 +32,8 @@ export function ProductList() {
 
   const handleProductClick = (product: Product) => () => navigate(`/products/${product.id}`);
 
-  const addToCart = (product: Product) => () => {
-    setCart((prev) => {
-      const existing = prev.find((item) => item.product.id === product.id);
-      if (existing) {
-        return prev.map((item) =>
-          item.product.id === product.id
-            ? { ...item, quantity: item.quantity + 1 }
-            : item
-        );
-      } else {
-        return [...prev, { product, quantity: 1 }];
-      }
-    });
-  };
+  const addToCart = (product: Product) => () => add(product);
   
-  const total = cart.reduce((sum, i) => sum + i.product.price * i.quantity, 0);
-  const count = cart.reduce((sum, i) => sum + i.quantity, 0);
-
   if (loading) return <Loading />
 
   if (error) {
@@ -107,12 +86,6 @@ export function ProductList() {
             </li>
           ))}
         </ul>
-      </div>
-      <div className="mt-4 text-center text-gray-600">
-        <div className="flex">
-          <ShoppingCart />
-          {count} Produkte im Warenkorb (€{total.toFixed(2)})
-        </div>
       </div>
     </>
   );
