@@ -1,114 +1,63 @@
-# Developer Workout React & TypeScript
+# React + TypeScript Developer Challenge
 
-## 1) Wie startet man das Projekt lokal?
+This repository is a **fork of the Micromerce developer challenge**. I used the provided starting point and implemented improvements on my own branch to demonstrate practical React and TypeScript development.
 
-- Repo klonen und ins Projektverzeichnis gehen:
-  - `cd dev-workout-react-typescript`
+> **My work is on the `saad/improvements` branch**, which is also configured as the default branch of this fork.
 
-- Abhängigkeiten installieren:
-  - `npm install`
+## What I implemented
 
-- `.env` Datei anlegen (oder `.env.example` kopieren):
-  - `VITE_API_BASE_URL=http://localhost:8080`
+- Improved project structure with pages, components, context, and shared types
+- Routing for product list and product detail pages
+- Global cart state using React Context
+- Immutable cart updates and quantity handling
+- Cart dropdown with totals, quantity controls, and clear action
+- Product data loaded from the backend instead of local sample data
+- Loading and error states
+- Environment-based API configuration
+- Cleaner imports with path aliases
+- Page-level titles and metadata
 
-- Dev-Server starten:
-  - `npm run dev`
+## Tech stack
 
-- Im Browser öffnen:
-  - [http://localhost:5173]
+- React
+- TypeScript
+- Vite
+- React Router
+- Context API
+- REST API integration
 
-## 2) Was fehlt dem Projekt, damit es in einer Produktionsumgebung eingesetzt werden kann?
+## Live demo
 
-Für Produktion würde ich ergänzen / beachten:
+- Frontend: https://micromerce.vercel.app/
+- Backend: https://dev-workout-backend-kotlin.onrender.com/products
 
-- Build + Hosting Prozess (z. B. `npm run build` + Hosting wie Vercel)
-- Umgebungsvariablen für API-URL (z. B. `.env` pro Umgebung)
-- Monitoring / Error Tracking (z. B. Sentry) und sinnvolle Logs
-- Tests (Unit-/Component-Tests)
-- CI Pipeline (lint + build + tests)
-- Security: Dependency Updates, ggf. Security Headers
-- CORS sauber auf Prod-Domain begrenzen (Backend)
+## Run locally
 
-## 3) Was sollte man ergänzen, wenn man mit mehreren Entwicklern daran arbeiten möchte?
+```bash
+npm install
+```
 
-- `.env.example`, damit jeder schnell starten kann
-- `.gitignore` für `.env`, damit keine lokalen Werte committed werden
-- Linting/Formatting (ESLint + Prettier) für einheitlichen Code
-- kurze Contributing-Regeln (z. B. Branch-Namen, Commits)
-- GitHub Actions (lint + build)
+Create a `.env` file:
 
-## 4) Welche Verbesserungen würdest du am Code vornehmen?
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
 
-Ich habe folgende Verbesserungen umgesetzt:
+Then start the development server:
 
-- Projektstruktur verbessert (`src/pages`, `src/components`, `src/context`, `src/types`)
-- Routing mit `react-router-dom`:
-  - `/` Produktliste
-  - `/products/:id` Produktdetail
-- Warenkorb in einen globalen React Context ausgelagert (sauberer State + Wiederverwendung)
-- Warenkorb UX verbessert:
-  - Cart Icon im Header
-  - Dropdown mit Items, Menge +/-, Clear, Total
-- Produktdaten kommen aus dem Backend (kein Fake-Sample im Frontend)
-- Fehlerbehandlung + Loading-Komponente
-- Path Alias `@/` für clean imports
-- SEO/Meta:
-  - meta tags in `index.html`
-  - dynamische Titles/Descriptions pro Seite (Helmet)
-- Favicon angepasst
+```bash
+npm run dev
+```
 
-## 5) Warum wird der Warenkorb beim Hinzufügen von Produkten nicht aktualisiert? Wie würdest du das Problem beheben?
+## Key engineering decision
 
-Ursache im ursprünglichen Projekt:
+The original cart implementation mutated a cart object directly, which did not reliably trigger React re-renders. I moved cart state into React state/context and used immutable updates so the UI remains synchronized with application state.
 
-- Der Warenkorb war ein mutables Objekt (Class/Set)
-- Beim Hinzufügen wurde nur intern mutiert, aber React-State wurde nicht geändert
-- Ergebnis: kein Re-Render → UI bleibt gleich
+## Related backend
 
-Fix:
+[Kotlin + Spring Boot challenge](https://github.com/saadouardi/dev-workout-backend-kotlin)
 
-- Warenkorb über React-State / Context verwalten (immutable updates)
-- gleiche Produkte zusammenfassen mit `quantity`
+## Author
 
-## 6) Kannst du die Produktliste aus einem Backend laden? Du kannst das Projekt dev-workout-backend-kotlin dafür verwenden
-
-Ja.
-
-- Frontend lädt Daten mit:
-  - `fetch(${VITE_API_BASE_URL}/products)`
-- API Base URL kommt aus `.env`
-- Backend läuft lokal z. B. auf:
-  - [http://localhost:8080]
-
-Wichtig:
-
-- Für lokale Entwicklung brauchte es CORS. Dafür habe ich im Backend eine CORS-Konfiguration ergänzt, damit Requests von `http://localhost:5173` erlaubt sind.
-
-## 7) Erstelle eine verbesserte Version des Projekts mit den von dir vorgeschlagenen Änderungen
-
-Umgesetzt:
-
-- Cart funktioniert zuverlässig (Context + immutable updates)
-- Cart Dropdown im Header (bessere UX)
-- Produktliste aus Backend
-- Produktdetailseite (Bonus)
-- `.env.example` + `.gitignore` angepasst
-- Fehlerhandling + Loading UI
-- Aliasing `@/` für Imports
-- Meta Tags / SEO
-
-## 8) Optionale Zusatzaufgabe: Produktdetailseite
-
-Umgesetzt:
-
-- Klick auf ein Produkt führt zu `/products/:id`
-- Detailseite zeigt:
-  - Name, Preis, Beschreibung
-- Beschreibung kommt aus dem Backend-Feld `description`
-- Zusätzlich: eigener Page Title und Meta Description
-
-## Live Demo
-
-Frontend (Vercel): [https://micromerce.vercel.app/]
-
-Backend (Render): [https://dev-workout-backend-kotlin.onrender.com/products]
+**Saad Ouardi**  
+[Portfolio](https://saadouardi.vercel.app) · [LinkedIn](https://www.linkedin.com/in/saad-ouardi)
